@@ -28,7 +28,7 @@ public class SprintBoardService {
 						new Story().setId(storyId), Story.class);
 			}
 		}
-		new RestTemplate().put(System.getenv("PROJECT_REPOSITORY_SERVICE_URI") + "/sprint/{id}/sprint",
+		new RestTemplate().put(System.getenv("PROJECT_REPOSITORY_SERVICE_URI") + "/sprint/{id}",
 				new Sprint().setStatus("Completed"), sprintId);
 	}
 
