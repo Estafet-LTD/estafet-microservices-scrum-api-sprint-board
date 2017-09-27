@@ -12,12 +12,23 @@ public class Sprint {
 
 	private String status;
 
+	private Integer projectId;
+
+	public Integer getProjectId() {
+		return projectId;
+	}
+
 	public String getStatus() {
 		return status;
 	}
 
 	public Sprint setStatus(String status) {
 		this.status = status;
+		return this;
+	}
+
+	public Sprint setId(Integer id) {
+		this.id = id;
 		return this;
 	}
 

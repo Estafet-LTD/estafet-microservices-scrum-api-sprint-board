@@ -8,7 +8,6 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.estafet.microservices.api.board.model.Project;
 import com.estafet.microservices.api.board.model.Sprint;
 import com.estafet.microservices.api.board.model.SprintBoard;
 import com.estafet.microservices.api.board.model.Story;
@@ -23,38 +22,31 @@ public class SprintBoardService {
 		SprintBoard board = getSprintBoard(sprintId);
 		if (!board.isComplete()) {
 			for (Integer storyId : board.getIncompleteStoryIds()) {
-				new RestTemplate().postForEntity(
-						System.getenv("STORY_REPOSITORY_SERVICE_URI") + "/remove-story-from-sprint",
+				new RestTemplate().postForEntity(System.getenv("STORY_API_SERVICE_URI") + "/remove-story-from-sprint",
 						new Story().setId(storyId), Story.class);
 			}
 		}
-		new RestTemplate().put(System.getenv("PROJECT_REPOSITORY_SERVICE_URI") + "/sprint/{id}",
+		new RestTemplate().put(System.getenv("SPRINT_API_SERVICE_URI") + "/sprint/{id}",
 				new Sprint().setStatus("Completed"), sprintId);
 	}
 
 	public SprintBoard getSprintBoard(int sprintId) {
 		Sprint sprint = getSprint(sprintId);
-		if (!sprint.getStatus().equals("Completed")) {
-			return new SprintBoard().addStories(getSprintStories(sprintId)).setSprint(sprint);
-		} else {
-			throw new RuntimeException("Sprint is completed for " + sprintId);
-		}
+		return new SprintBoard().addStories(getSprintStories(sprintId)).setSprint(sprint);
 	}
 
 	@SuppressWarnings({ "rawtypes" })
 	private List<Story> getSprintStories(int sprintId) {
-
 		int projectId = new RestTemplate()
-				.getForObject(System.getenv("PROJECT_REPOSITORY_SERVICE_URI") + "/sprint/{id}/project", Project.class,
-						sprintId)
-				.getId();
+				.getForObject(System.getenv("SPRINT_API_SERVICE_URI") + "/sprint/{id}", Sprint.class, sprintId)
+				.getProjectId();
 
 		Map<String, Integer> params = new HashMap<String, Integer>();
 		params.put("projectId", projectId);
 		params.put("sprintId", sprintId);
 		List objects = new RestTemplate().getForObject(
-				System.getenv("STORY_REPOSITORY_SERVICE_URI") + "/project/{projectId}/stories?sprintId={sprintId}",
-				List.class, params);
+				System.getenv("STORY_API_SERVICE_URI") + "/project/{projectId}/stories?sprintId={sprintId}", List.class,
+				params);
 		List<Story> stories = new ArrayList<Story>();
 		ObjectMapper mapper = new ObjectMapper();
 		for (Object object : objects) {
@@ -66,12 +58,12 @@ public class SprintBoardService {
 	}
 
 	private Sprint getSprint(int sprintId) {
-		return new RestTemplate().getForObject(System.getenv("PROJECT_REPOSITORY_SERVICE_URI") + "/sprint/{sprintId}",
+		return new RestTemplate().getForObject(System.getenv("SPRINT_API_SERVICE_URI") + "/sprint/{sprintId}",
 				Sprint.class, sprintId);
 	}
 
 	private Task getTask(int taskId) {
-		return new RestTemplate().getForObject(System.getenv("STORY_REPOSITORY_SERVICE_URI") + "/task/{id}", Task.class,
+		return new RestTemplate().getForObject(System.getenv("STORY_API_SERVICE_URI") + "/task/{id}", Task.class,
 				taskId);
 	}
 
@@ -79,14 +71,14 @@ public class SprintBoardService {
 		RestTemplate template = new RestTemplate();
 		Map<String, Integer> params = new HashMap<String, Integer>();
 		params.put("id", task.getId());
-		template.put(System.getenv("STORY_REPOSITORY_SERVICE_URI") + "/task/{id}", task, params);
+		template.put(System.getenv("STORY_API_SERVICE_URI") + "/task/{id}", task, params);
 		return getTask(task.getId());
 	}
 
 	public Task completeTask(int taskId) {
 		Task task = saveTask(getTask(taskId).complete());
-		Story story = new RestTemplate()
-				.getForObject(System.getenv("STORY_REPOSITORY_SERVICE_URI") + "/task/{id}/story", Story.class, taskId);
+		Story story = new RestTemplate().getForObject(System.getenv("STORY_API_SERVICE_URI") + "/task/{id}/story",
+				Story.class, taskId);
 		SprintBoard board = getSprintBoard(story.getSprintId());
 		if (board.isComplete()) {
 			completeSprint(story.getSprintId());
