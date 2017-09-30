@@ -20,12 +20,16 @@ public class Task {
 	@JsonInclude(Include.NON_NULL)
 	private Integer remainingHours;
 
+	@JsonInclude(Include.NON_NULL)
+	private String remainingUpdated;
+
 	private String status = "Not Started";
 
-	public Task complete() {
+	public Task complete(String remainingUpdated) {
 		if (!"Completed".equals(status)) {
 			remainingHours = 0;
 			status = "Completed";
+			this.remainingUpdated = remainingUpdated;
 			return this;
 		}
 		throw new RuntimeException("Task is already complete.");
@@ -110,6 +114,14 @@ public class Task {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getRemainingUpdated() {
+		return remainingUpdated;
+	}
+
+	public void setRemainingUpdated(String remainingUpdated) {
+		this.remainingUpdated = remainingUpdated;
 	}
 
 }

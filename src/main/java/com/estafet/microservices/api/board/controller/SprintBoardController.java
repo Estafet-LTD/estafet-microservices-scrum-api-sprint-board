@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.estafet.microservices.api.board.model.SprintBoard;
 import com.estafet.microservices.api.board.service.SprintBoardService;
+import com.estafet.microservices.api.board.service.TaskService;
 
 // changing
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -18,6 +19,9 @@ public class SprintBoardController {
 
 	@Autowired
 	private SprintBoardService sprintBoardService;
+	
+	@Autowired
+	private TaskService taskService;
 
 	@GetMapping("/sprint/{sprintId}/board")
 	public SprintBoard getSprintBoard(@PathVariable int sprintId) {
@@ -26,22 +30,22 @@ public class SprintBoardController {
 
 	@PostMapping("/task/{id}/complete")
 	public ResponseEntity completeTask(@PathVariable int id) {
-		return new ResponseEntity(sprintBoardService.completeTask(id), HttpStatus.OK);
+		return new ResponseEntity(taskService.completeTask(id), HttpStatus.OK);
 	}
 
 	@PostMapping("/task/{id}/reopen")
 	public ResponseEntity reopenTask(@PathVariable int id) {
-		return new ResponseEntity(sprintBoardService.reopenTask(id), HttpStatus.OK);
+		return new ResponseEntity(taskService.reopenTask(id), HttpStatus.OK);
 	}
 
 	@PostMapping("/task/{id}/claim")
 	public ResponseEntity claimTask(@PathVariable int id) {
-		return new ResponseEntity(sprintBoardService.claimTask(id), HttpStatus.OK);
+		return new ResponseEntity(taskService.claimTask(id), HttpStatus.OK);
 	}
 
 	@PostMapping("/task/{id}/updatehours")
 	public ResponseEntity updateRemainingTaskHours(@PathVariable int id, @PathVariable Integer remainingHours) {
-		return new ResponseEntity(sprintBoardService.updateRemainingTaskHours(id, remainingHours), HttpStatus.OK);
+		return new ResponseEntity(taskService.updateRemainingTaskHours(id, remainingHours), HttpStatus.OK);
 	}
 
 }
