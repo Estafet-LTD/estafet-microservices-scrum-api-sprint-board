@@ -11,12 +11,10 @@ public class SprintBoardService {
 
 	@Autowired SprintService sprintService;
 
-	@Autowired
-	private StoryService storyService;
-
 	public SprintBoard getSprintBoard(int sprintId) {
 		Sprint sprint = sprintService.getSprint(sprintId);
-		return new SprintBoard().addStories(storyService.getSprintStories(sprintId)).setSprint(sprint);
+		SprintBoard sprintBoard = new SprintBoard();
+		return sprintBoard.addStories(sprint.getStories()).setSprint(sprint);
 	}
 
 }

@@ -23,43 +23,7 @@ public class Task {
 	@JsonInclude(Include.NON_NULL)
 	private String remainingUpdated;
 
-	private String status = "Not Started";
-
-	public Task complete(String remainingUpdated) {
-		if (!"Completed".equals(status)) {
-			remainingHours = 0;
-			status = "Completed";
-			this.remainingUpdated = remainingUpdated;
-			return this;
-		}
-		throw new RuntimeException("Task is already complete.");
-	}
-
-	public Task reopen() {
-		if ("Completed".equals(status)) {
-			status = "Not Started";
-			return this;
-		}
-		throw new RuntimeException("Task must be completed to reopen.");
-	}
-
-	public Task claim() {
-		if ("Not Started".equals(status)) {
-			status = "In Progress";
-			return this;
-		}
-		throw new RuntimeException("Task needs to be not started to claim it.");
-	}
-
-	public Task setRemainingHours(Integer remainingHours) {
-		if (remainingHours != null) {
-			this.remainingHours = remainingHours;
-			if (remainingHours == 0) {
-				status = "Completed";
-			}
-		}
-		return this;
-	}
+	private String status;
 
 	public Integer getId() {
 		return id;
