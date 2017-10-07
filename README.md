@@ -82,7 +82,7 @@ GET http://sprint-board-api/sprint/2/board
 
 ## Environment Variables
 ```
-SPRINT_API_SERVICE_URI=http://sprint-api
-STORY_API_SERVICE_URI=http://story-api
-TASK_API_SERVICE_URI=http://task-api
+SPRINT_API_SERVICE_URI=http://localhost:8080/sprint-api
+STORY_API_SERVICE_URI=http://localhost:8080/story-api
+TASK_API_SERVICE_URI=http://localhost:8080/task-api
 ```
