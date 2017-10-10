@@ -9,12 +9,19 @@ import com.estafet.microservices.api.board.model.SprintBoard;
 @Service
 public class SprintBoardService {
 
-	@Autowired SprintService sprintService;
+	@Autowired
+	private SprintService sprintService;
+
+	@Autowired
+	private StoryService storyService;
+	
+	@Autowired
+	private TaskService taskService;
 
 	public SprintBoard getSprintBoard(int sprintId) {
 		Sprint sprint = sprintService.getSprint(sprintId);
-		SprintBoard sprintBoard = new SprintBoard();
-		return sprintBoard.addStories(sprint.getStories()).setSprint(sprint);
+		SprintBoard sprintBoard = new SprintBoard(taskService);
+		return sprintBoard.addStories(storyService.getStories(sprint)).setSprint(sprint);
 	}
 
 }

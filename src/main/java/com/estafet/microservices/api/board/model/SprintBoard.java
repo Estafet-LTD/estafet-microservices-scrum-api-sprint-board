@@ -5,9 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.estafet.microservices.api.board.service.TaskService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class SprintBoard {
+	
+	@JsonIgnore
+	private TaskService taskService;
 
 	private Sprint sprint;
 
@@ -16,6 +20,10 @@ public class SprintBoard {
 	private List<Task> inProgress = new ArrayList<Task>();
 
 	private List<Task> completed = new ArrayList<Task>();
+
+	public SprintBoard(TaskService taskService) {
+		this.taskService = taskService;
+	}
 
 	public SprintBoard addStories(List<Story> stories) {
 		for (Story story : stories) {
@@ -43,7 +51,7 @@ public class SprintBoard {
 	}
 
 	private void addTasks(String status, Story story, List<Task> to) {
-		for (Task fromTask : story.getTasks()) {
+		for (Task fromTask : taskService.getTasks(story)) {
 			fromTask.setStoryId(story.getId());
 			if (fromTask.getStatus().equals(status)) {
 				to.add(fromTask);
