@@ -3,7 +3,6 @@
   <groupId>estafet-microservices-scrum</groupId>
   <artifactId>estafet-microservices-scrum-api-sprint-board</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
   <name>estafet-microservices-scrum-api-sprint-board</name>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -15,12 +14,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-tomcat</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
