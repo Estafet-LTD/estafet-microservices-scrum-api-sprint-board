@@ -48,4 +48,13 @@ public class Sprint {
 		return number;
 	}
 
+	public static Sprint getAPI() {
+		Sprint sprint = new Sprint();
+		sprint.id = 1;
+		sprint.number = 1;
+		sprint.projectId = 1;
+		sprint.status = "Not Started";
+		sprint.startDate = "2017-10-16 00:00:00";
+		return sprint;
+	}
 }

@@ -87,5 +87,18 @@ public class Task {
 	public void setRemainingUpdated(String remainingUpdated) {
 		this.remainingUpdated = remainingUpdated;
 	}
+	
+	public static Task getAPI() {
+		Task task = new Task();
+		task.id = 1;
+		task.description = "my task description";
+		task.initialHours = 5;
+		task.remainingHours = 5;
+		task.remainingUpdated = "2017-10-16 00:00:00";
+		task.status = "Not Started";
+		task.title = "my task";
+		task.storyId = 1;
+		return task;
+	}
 
 }

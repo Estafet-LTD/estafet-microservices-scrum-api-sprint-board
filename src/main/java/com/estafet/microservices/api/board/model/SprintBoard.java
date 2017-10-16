@@ -21,6 +21,8 @@ public class SprintBoard {
 
 	private List<Task> completed = new ArrayList<Task>();
 
+	SprintBoard() {}
+	
 	public SprintBoard(TaskService taskService) {
 		this.taskService = taskService;
 	}
@@ -99,6 +101,15 @@ public class SprintBoard {
 			ids.add(task.getStoryId());
 		}
 		return ids;
+	}
+	
+	public static SprintBoard getAPI() {
+		SprintBoard board = new SprintBoard();
+		board.todo.add(Task.getAPI());
+		board.inProgress.add(Task.getAPI());
+		board.completed.add(Task.getAPI());
+		board.sprint = Sprint.getAPI();
+		return board;
 	}
 
 }
