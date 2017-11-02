@@ -55,6 +55,7 @@ public class SprintBoard {
 	private void addTasks(String status, Story story, List<Task> to) {
 		for (Task fromTask : taskService.getTasks(story)) {
 			fromTask.setStoryId(story.getId());
+			fromTask.setStoryTitle(story.getTitle());
 			if (fromTask.getStatus().equals(status)) {
 				to.add(fromTask);
 			}

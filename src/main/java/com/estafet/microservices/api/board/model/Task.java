@@ -1,8 +1,6 @@
 package com.estafet.microservices.api.board.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Task {
@@ -17,13 +15,13 @@ public class Task {
 
 	private Integer storyId;
 
-	@JsonInclude(Include.NON_NULL)
 	private Integer remainingHours;
 
-	@JsonInclude(Include.NON_NULL)
 	private String remainingUpdated;
 
 	private String status;
+
+	private String storyTitle;
 
 	public Integer getId() {
 		return id;
@@ -87,7 +85,15 @@ public class Task {
 	public void setRemainingUpdated(String remainingUpdated) {
 		this.remainingUpdated = remainingUpdated;
 	}
-	
+
+	public String getStoryTitle() {
+		return storyTitle;
+	}
+
+	public void setStoryTitle(String storyTitle) {
+		this.storyTitle = storyTitle;
+	}
+
 	public static Task getAPI() {
 		Task task = new Task();
 		task.id = 1;

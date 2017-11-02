@@ -11,6 +11,12 @@ public class Story {
 
 	private Integer projectId;
 
+	private String title;
+
+	public String getTitle() {
+		return title;
+	}
+
 	public int getId() {
 		return id;
 	}
