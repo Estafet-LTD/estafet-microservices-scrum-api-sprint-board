@@ -1,0 +1,13 @@
+---
+- name: Create database for microservice
+  hosts: localhost
+  vars_files:
+    - microservice-vars.yml  
+  tasks:
+   
+    - name: Login in Openshift
+      shell: "oc login --insecure-skip-tls-verify=true -u {{ username }} -p {{ password }} {{ openshift }}"
+      tags:
+        - openshift
+        
+    - include_tasks: create-app-tasks.yml        

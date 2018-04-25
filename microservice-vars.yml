@@ -1,0 +1,20 @@
+---
+# Define the name of the microservice
+microservice: sprint-board
+
+# defines the location of the estafet github (change this if you have forked and want to use another github)
+github: https://github.com/Estafet-LTD
+repo: estafet-microservices-scrum-api-sprint-board
+
+# UNCOMENT Define the OpenShift host:port address
+openshift: 10.0.75.2:8443
+
+# Your OpenShift credentials
+username: developer
+password: developer
+
+cpu_min: 50m
+cpu_max: 500m
+
+memory_min: 50Mi
+memory_max: 150Mi
