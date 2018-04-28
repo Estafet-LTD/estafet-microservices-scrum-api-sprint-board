@@ -3,7 +3,7 @@
   include_vars:
     file: microservice-vars.yml   
   
-- include: service_envs.yml 
+- include: service-envs.yml 
 
 - name: Create the microservices application from the source to image builder application
   shell: 'oc new-app redhat-openjdk18-openshift~{{ github }}/{{ repo }} --name={{ microservice }} -e {{ service_envs }} && sleep 180'
