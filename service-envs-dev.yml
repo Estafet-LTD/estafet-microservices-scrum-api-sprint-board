@@ -1,6 +1,6 @@
 ---
 
-- set_fact: service_envs="MAVEN_MIRROR_URL=http://nexus.cicd.svc:8081/nexus/content/groups/public"
+- set_fact: service_envs="--build-env MAVEN_MIRROR_URL=http://nexus.cicd.svc:8081/nexus/content/groups/public"
 - set_fact: service_envs="{{ service_envs }} -e SPRINT_API_SERVICE_URI=http://localhost:8080/sprint-api"
 - set_fact: service_envs="{{ service_envs }} -e STORY_API_SERVICE_URI=http://localhost:8080/story-api"
 - set_fact: service_envs="{{ service_envs }} -e TASK_API_SERVICE_URI=http://localhost:8080/task-api"

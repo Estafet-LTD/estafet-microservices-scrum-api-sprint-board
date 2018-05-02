@@ -1,6 +1,6 @@
 ---
 
-- set_fact: service_envs="JAEGER_SAMPLER_TYPE=const -e JAEGER_SAMPLER_PARAM=1 -e JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger-agent.{{ project }}.svc:5778 -e JAEGER_AGENT_HOST=jaeger-agent.{{ project }}.svc"
+- set_fact: service_envs="-e JAEGER_SAMPLER_TYPE=const -e JAEGER_SAMPLER_PARAM=1 -e JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger-agent.{{ project }}.svc:5778 -e JAEGER_AGENT_HOST=jaeger-agent.{{ project }}.svc"
 - set_fact: service_envs="{{ service_envs }} -e SPRINT_API_SERVICE_URI=http://sprint-api.{{ project }}.svc:8080"
 - set_fact: service_envs="{{ service_envs }} -e STORY_API_SERVICE_URI=http://story-api.{{ project }}.svc:8080"
 - set_fact: service_envs="{{ service_envs }} -e TASK_API_SERVICE_URI=http://task-api.{{ project }}.svc:8080"
