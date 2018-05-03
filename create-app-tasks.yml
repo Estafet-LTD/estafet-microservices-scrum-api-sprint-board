@@ -13,16 +13,8 @@
   tags:
     - openshift         
 
-- name: Wait for the microservice to become available
-  shell : "oc rollout status dc/{{ microservice }}"
-  register: command_result
-  failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
-  changed_when: "'exists' not in command_result.stderr"
-  tags:
-    - openshift   
-
 - name: Set the readiness probe 
-  shell: "oc set probe dc/{{ microservice }} --readiness --get-url=http://:8080/api --initial-delay-seconds=60"
+  shell: "oc set probe dc/{{ microservice }} --readiness --get-url=http://:8080/api --initial-delay-seconds=30"
   register: command_result
   failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
   changed_when: "'exists' not in command_result.stderr"
