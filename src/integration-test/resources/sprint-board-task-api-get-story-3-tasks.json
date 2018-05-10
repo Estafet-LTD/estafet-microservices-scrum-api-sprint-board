@@ -1,0 +1,13 @@
+{
+	"request": {
+		"method": "GET",
+		"url": "/sprint-board/task-api/story/3/tasks"
+	},
+	"response": {
+		"status": 200,
+		"body": "[{\"id\": 7,\"title\": \"Task #7786\",\"description\": \"Task #7786\", \"initialHours\": 13, \"remainingHours\": 13, \"status\": \"Not Started\"}, {\"id\": 8,\"title\": \"Task #9765\",\"description\": \"Task #9765\", \"initialHours\": 20, \"remainingHours\": 20, \"status\": \"Not Started\"}, {\"id\": 9,\"title\": \"Task #1123\",\"description\": \"Task #1123\", \"initialHours\": 5, \"remainingHours\": 5, \"status\": \"Not Started\"}]",
+		"headers": {
+            "Content-Type": "application/json"
+        }
+	}
+}

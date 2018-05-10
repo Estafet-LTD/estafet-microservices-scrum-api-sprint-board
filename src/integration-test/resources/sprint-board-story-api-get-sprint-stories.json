@@ -1,0 +1,13 @@
+{
+	"request": {
+		"method": "GET",
+		"url": "/sprint-board/story-api/project/2/stories?sprintId=1"
+	},
+	"response": {
+		"status": 200,
+		"body": "[{\"id\": 1, \"title\": \"Story #7353\", \"status\": \"Not Started\", \"projectId\": 2, \"storypoints\": 5 },{\"id\": 2, \"title\": \"Story #6482\", \"status\": \"Not Started\", \"projectId\": 2, \"storypoints\": 13 },{\"id\": 3, \"title\": \"Story #9869\", \"status\": \"In Progress\",  \"projectId\": 2,  \"projectid\": 2, \"sprintId\": 1, \"storypoints\": 13 },{\"id\": 4, \"title\": \"Story #4249\", \"status\": \"In Progress\", \"projectId\": 2, \"sprintId\": 1, \"storypoints\": 13 }]",
+		"headers": {
+            "Content-Type": "application/json"
+        }
+	}
+}
