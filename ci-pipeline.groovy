@@ -9,14 +9,6 @@ node("maven") {
 		git branch: "master", url: "https://github.com/Estafet-LTD/estafet-microservices-scrum-api-sprint-board"
 	}
 
-	stage("unit tests") {
-		try {
-			sh "mvn clean test"
-		} finally {
-			junit "**/target/surefire-reports/*.xml"
-		}
-	}
-
 	stage("update wiremock") {
 		sh "oc get pods --selector app=wiremock-docker -o json -n ${project} > pods.json"
 		def json = readFile('pods.json');
