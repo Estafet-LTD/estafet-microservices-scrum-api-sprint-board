@@ -25,12 +25,11 @@ public class ITSprintBoardTest {
 	public void testGetSprintBoard() {
 		get("sprint/1/board").then()
 			.body("sprint.id", is(1))
-			.body("sprint.startDate", is("2017-10-01 00:00:00"))
-			.body("sprint.endDate", is("2017-10-04 00:00:00"))
+			.body("sprint.startDate", is("2017-10-16 00:00:00"))
+			.body("sprint.endDate", is("2017-10-20 00:00:00"))
 			.body("sprint.number", is(1))
 			.body("sprint.projectId", is(2))
-			.body("todo.id", hasItems(1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11, 12))
-			.body("to.title", hasItems(235.0f, 117.5f, 0.0f));
+			.body("todo.id", hasItems(1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11, 12));
 	}
 
 
