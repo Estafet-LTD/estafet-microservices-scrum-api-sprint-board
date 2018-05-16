@@ -3,7 +3,7 @@
 microservice: sprint-board
 
 cpu_min: 50m
-cpu_max: 500m
+cpu_max: 1000m
 
 memory_min: 50Mi
-memory_max: 150Mi
+memory_max: 200Mi

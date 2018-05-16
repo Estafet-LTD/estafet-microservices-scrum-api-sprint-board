@@ -2,8 +2,6 @@ node("maven") {
 
 	def project = "dev"
 	def microservice = "sprint-board"
-	
-	currentBuild.description = "Build a container from the source, then execute unit and container integration tests before promoting the container as a release candidate for acceptance testing."
 
 	stage("checkout") {
 		git branch: "master", url: "https://github.com/Estafet-LTD/estafet-microservices-scrum-api-sprint-board"
@@ -22,18 +20,22 @@ node("maven") {
 	stage("build & deploy container") {
 		openshiftBuild namespace: project, buildConfig: microservice, showBuildLogs: "true",  waitTime: "3000000"
 		openshiftVerifyDeployment namespace: project, depCfg: microservice, replicaCount:"1", verifyReplicaCount: "true", waitTime: "300000"
+		sleep time:90
 	}
 
 	stage("container tests") {
-		try {
-			withEnv(
-				[ "SPRINT_BOARD_API_SERVICE_URI=http://${microservice}.${project}.svc:8080" ]) {
-				sh "mvn verify -P integration-test"
-			}
-		} finally {
-			junit "**/target/failsafe-reports/*.xml"
-		}
+		[ "SPRINT_BOARD_API_SERVICE_URI=http://${microservice}.${project}.svc:8080" ]) {
+			withMaven(mavenSettingsConfig: 'microservices-scrum') {
+ 				sh "mvn clean verify -P integration-test"
+			} 
+		} 
 	}
+	
+	stage("deploy snapshots") {
+		withMaven(mavenSettingsConfig: 'microservices-scrum') {
+ 			sh "mvn clean deploy -Dmaven.test.skip=true"
+		} 
+	}	
 	
 	stage("tag container for testing") {
 		openshiftTag namespace: project, srcStream: microservice, srcTag: 'latest', destinationNamespace: 'test', destinationStream: microservice, destinationTag: 'PrepareForTesting'

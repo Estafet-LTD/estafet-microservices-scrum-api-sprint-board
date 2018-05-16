@@ -13,15 +13,6 @@
   tags:
     - openshift         
 
-- name: Set the readiness probe 
-  shell: "oc set probe dc/{{ microservice }} --readiness --get-url=http://:8080/api --initial-delay-seconds=30"
-  when: "{{ readiness_probe }}"
-  register: command_result
-  failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
-  changed_when: "'exists' not in command_result.stderr"
-  tags:
-    - openshift
-
 - name: Configure the resource limits for this microservice
   shell: "oc set resources dc {{ microservice }} -c={{ microservice }} --limits=cpu={{ cpu_max }},memory={{ memory_max }} --requests=cpu={{ cpu_min }},memory={{ memory_min }}"
   register: command_result
