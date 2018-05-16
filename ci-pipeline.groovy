@@ -28,7 +28,6 @@ node("maven") {
 			withMaven(mavenSettingsConfig: 'microservices-scrum') {
  				sh "mvn clean verify -P integration-test"
 			} 
-		} 
 	}
 	
 	stage("deploy snapshots") {
