@@ -46,8 +46,14 @@ node('maven') {
         withMaven(mavenSettingsConfig: 'microservices-scrum') {
 			sh "mvn release:clean release:prepare release:perform -DreleaseVersion=${releaseVersion} -DdevelopmentVersion=${developmentVersion} -DpushChanges=false -DlocalCheckout=true -DpreparationGoals=initialize -B"
 			sh "git push origin master"
+			sh "git tag ${releaseTag}"
+			sh "git push origin ${releaseTag}"
 		} 
 	}	
+
+	stage("tag image") {
+		openshiftTag namespace: project, srcStream: microservice, srcTag: 'PrepareForTesting', destinationNamespace: 'prod', destinationStream: microservice, destinationTag: releaseVersion
+	}
 	
 	stage("deploy container") {
 		sh "oc get is -o json -n ${project} > is.json"
@@ -63,24 +69,6 @@ node('maven') {
 		}
 		openshiftVerifyDeployment namespace: project, depCfg: microservice, replicaCount:"1", verifyReplicaCount: "true", waitTime: "600000"
 	}	
-}
-
-node('maven') {
-
-	stage("checkout acceptance tests") {
-		git branch: "master", url: "https://github.com/Estafet-LTD/estafet-microservices-scrum-qa"
-	}
-
-	stage("execute acceptance tests") {
-		withMaven(mavenSettingsConfig: 'microservices-scrum') {
-			sh "mvn clean install"
-		} 
-	}
-	
-	stage("tag container with release version") {
-		openshiftTag namespace: project, srcStream: microservice, srcTag: 'PrepareForTesting', destinationNamespace: 'prod', destinationStream: microservice, destinationTag: releaseVersion
-	}
-
 }
 
 
