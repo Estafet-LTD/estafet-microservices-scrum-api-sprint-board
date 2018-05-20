@@ -26,6 +26,7 @@ def microservice = "sprint-board"
 
 def developmentVersion
 def releaseVersion
+def releaseTag
 
 node('maven') {
 
@@ -38,6 +39,7 @@ node('maven') {
 		def matcher = new XmlSlurper().parseText(pom).version =~ /(\d+\.\d+\.)(\d+)(\-SNAPSHOT)/
 		developmentVersion = "${matcher[0][1]}${matcher[0][2].toInteger()+1}-SNAPSHOT"
 		releaseVersion = "${matcher[0][1]}${matcher[0][2]}"
+		releaseTag = "v${releaseVersion}"
 	}
 	
 	stage("perform release") {
