@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>estafet-microservices-scrum</groupId>
 	<artifactId>estafet-microservices-scrum-api-sprint-board</artifactId>
-	<version>0.0.6-SNAPSHOT</version>
+	<version>0.0.7-SNAPSHOT</version>
 	<name>estafet-microservices-scrum-api-sprint-board</name>
 	
 	<url>https://github.com/Estafet-LTD/estafet-microservices-scrum-api-sprint-board</url>
