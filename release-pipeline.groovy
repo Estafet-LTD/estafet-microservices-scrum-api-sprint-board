@@ -61,16 +61,19 @@ node('maven') {
 		sh "oc get is -o json -n ${project} > is.json"
 		def is = readFile('is.json')
 		def image = getImage (is, microservice)
-		def template = readFile ('test-deployment-config.json').replaceAll(/\$\{image\}/, image).replaceAll(/\$\{microservice\}/, microservice)
 		sh "oc get dc -o json -n test > dc.json"
 		def dc = readFile ('dc.json')
 		if (deploymentConfigurationExists (dc, microservice)) {
 			openshiftDeploy namespace: project, depCfg: microservice
 		} else {
+			def template = readFile ('test-deployment-config.json').replaceAll(/\$\{image\}/, image).replaceAll(/\$\{microservice\}/, microservice)
+			def serviceTemplate = readFile ('test-service-config.yaml').replaceAll(/\$\{microservice\}/, microservice)
 			openshiftCreateResource namespace:project, jsonyaml:template
+			openshiftCreateResource namespace:project, jsonyaml:serviceTemplate
 		}
 		openshiftVerifyDeployment namespace: project, depCfg: microservice, replicaCount:"1", verifyReplicaCount: "true", waitTime: "600000"
 	}	
+	
 }
 
 
