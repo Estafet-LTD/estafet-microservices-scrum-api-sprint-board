@@ -74,6 +74,10 @@ node('maven') {
 		openshiftVerifyDeployment namespace: project, depCfg: microservice, replicaCount:"1", verifyReplicaCount: "true", waitTime: "600000"
 	}	
 	
+	stage("execute acceptance tests") {
+		sh "oc start-build qa-pipeline -n cicd"	
+	}
+	
 }
 
 
