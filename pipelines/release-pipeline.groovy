@@ -34,6 +34,27 @@ node('maven') {
 		git branch: "master", url: "https://${username()}:${password()}@github.com/Estafet-LTD/estafet-microservices-scrum-api-sprint-board"
 	}
 	
+	stage("deploy container") {
+		sh "oc get is -o json -n ${project} > is.json"
+		def is = readFile('is.json')
+		def image = getImage (is, microservice)
+		sh "oc get dc -o json -n test > dc.json"
+		def dc = readFile ('dc.json')
+		if (deploymentConfigurationExists (dc, microservice)) {
+			openshiftDeploy namespace: project, depCfg: microservice
+		} else {
+			def template = readFile ('openshift/test-deployment-config.json').replaceAll(/\$\{image\}/, image).replaceAll(/\$\{microservice\}/, microservice)
+			def serviceTemplate = readFile ('openshift/test-service-config.yaml').replaceAll(/\$\{microservice\}/, microservice)
+			openshiftCreateResource namespace:project, jsonyaml:template
+			openshiftCreateResource namespace:project, jsonyaml:serviceTemplate
+		}
+		openshiftVerifyDeployment namespace: project, depCfg: microservice, replicaCount:"1", verifyReplicaCount: "true", waitTime: "600000"
+	}	
+	
+	stage("execute acceptance tests") {
+		sh "oc start-build qa-pipeline -n cicd"	
+	}
+	
 	stage("increment version") {
 		def pom = readFile('pom.xml');
 		def matcher = new XmlSlurper().parseText(pom).version =~ /(\d+\.\d+\.)(\d+)(\-SNAPSHOT)/
@@ -55,28 +76,7 @@ node('maven') {
 
 	stage("tag image") {
 		openshiftTag namespace: project, srcStream: microservice, srcTag: 'PrepareForTesting', destinationNamespace: 'prod', destinationStream: microservice, destinationTag: releaseVersion
-	}
-	
-	stage("deploy container") {
-		sh "oc get is -o json -n ${project} > is.json"
-		def is = readFile('is.json')
-		def image = getImage (is, microservice)
-		sh "oc get dc -o json -n test > dc.json"
-		def dc = readFile ('dc.json')
-		if (deploymentConfigurationExists (dc, microservice)) {
-			openshiftDeploy namespace: project, depCfg: microservice
-		} else {
-			def template = readFile ('openshift/test-deployment-config.json').replaceAll(/\$\{image\}/, image).replaceAll(/\$\{microservice\}/, microservice)
-			def serviceTemplate = readFile ('openshift/test-service-config.yaml').replaceAll(/\$\{microservice\}/, microservice)
-			openshiftCreateResource namespace:project, jsonyaml:template
-			openshiftCreateResource namespace:project, jsonyaml:serviceTemplate
-		}
-		openshiftVerifyDeployment namespace: project, depCfg: microservice, replicaCount:"1", verifyReplicaCount: "true", waitTime: "600000"
 	}	
-	
-	stage("execute acceptance tests") {
-		sh "oc start-build qa-pipeline -n cicd"	
-	}
 	
 }
 
