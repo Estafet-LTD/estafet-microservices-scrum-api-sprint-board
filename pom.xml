@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>com.estafet.microservices.scrum</groupId>
 		<artifactId>microservices-scrum-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 		<relativePath />
 	</parent>
 
