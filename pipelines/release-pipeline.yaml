@@ -4,8 +4,8 @@ metadata:
   creationTimestamp: null
   labels:
     app: pipeline
-    name: ci-sprint-board
-  name: ci-sprint-board
+    name: release-sprint-board
+  name: release-sprint-board
 spec:
   output: {}
   postCommit: {}
@@ -16,14 +16,7 @@ spec:
       uri: "https://github.com/Estafet-LTD/estafet-microservices-scrum-api-sprint-board"
   strategy:
     jenkinsPipelineStrategy:
-      jenkinsfilePath: ci-pipeline.groovy
+      jenkinsfilePath: pipelines/release-pipeline.groovy
     type: JenkinsPipeline
-  triggers:
-  - github:
-      secret: secret101
-    type: GitHub
-  - generic:
-      secret: secret101
-    type: Generic
 status:
   lastVersion: 0

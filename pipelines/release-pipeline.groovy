@@ -66,8 +66,8 @@ node('maven') {
 		if (deploymentConfigurationExists (dc, microservice)) {
 			openshiftDeploy namespace: project, depCfg: microservice
 		} else {
-			def template = readFile ('test-deployment-config.json').replaceAll(/\$\{image\}/, image).replaceAll(/\$\{microservice\}/, microservice)
-			def serviceTemplate = readFile ('test-service-config.yaml').replaceAll(/\$\{microservice\}/, microservice)
+			def template = readFile ('openshift/test-deployment-config.json').replaceAll(/\$\{image\}/, image).replaceAll(/\$\{microservice\}/, microservice)
+			def serviceTemplate = readFile ('openshift/test-service-config.yaml').replaceAll(/\$\{microservice\}/, microservice)
 			openshiftCreateResource namespace:project, jsonyaml:template
 			openshiftCreateResource namespace:project, jsonyaml:serviceTemplate
 		}

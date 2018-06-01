@@ -22,7 +22,7 @@
   when: "{{ test_environment }}"
 
 - name: Create the microservices application from the source to image builder application
-  shell: 'oc new-app redhat-openjdk18-openshift:1.2~{{ github }}/{{ repo }}#{{ branch }} --name={{ microservice }} {{ service_envs }}'
+  shell: 'oc new-app redhat-openjdk18-openshift:1.2~{{ github }}/{{ repo }}#{{ branch }} --name={{ microservice }} {{ service_envs }} -l name=microservices-scrum'
   register: command_result
   failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
   changed_when: "'exists' not in command_result.stderr"
