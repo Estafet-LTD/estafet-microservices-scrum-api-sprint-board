@@ -2,42 +2,22 @@
 	"kind": "DeploymentConfig",
 	"metadata": {
 		"labels": {
-			"app": "sprint-api"
+			"app": "sprint-board"
 		},
-		"name": "sprint-api"
+		"name": "sprint-board"
 	},
 	"spec": {
-		"strategy": {
-			"type": "Recreate",
-			"recreateParams": {
-				"timeoutSeconds": 60,
-				"pre": {
-					"failurePolicy": "Ignore",
-					"execNewPod": {
-						"command": [
-							"sh",
-							"-c",
-							"cd /tmp/src \u0026\u0026 /opt/rh/rh-maven33/root/usr/share/maven/bin/mvn resources:resources liquibase:update -Dmaven.repo.local=/tmp/artifacts/m2 -s /tmp/artifacts/configuration/settings.xml"
-						],
-						"containerName": "sprint-api"
-					}
-				}
-			},
-			"resources": {
-				
-			}
-		},
 		"replicas": "1",
 		"revisionHistoryLimit": "10",
 		"selector": {
-			"app": "sprint-api",
-			"deploymentconfig": "sprint-api"
+			"app": "sprint-board",
+			"deploymentconfig": "sprint-board"
 		},
 		"template": {
 			"metadata": {
 				"labels": {
-					"app": "sprint-api",
-					"deploymentconfig": "sprint-api"
+					"app": "sprint-board",
+					"deploymentconfig": "sprint-board"
 				}
 			},
 			"spec": {
@@ -73,7 +53,7 @@
 								"value": "jaeger-agent.prod.svc"
 							}
 						],
-						"name": "sprint-api",
+						"name": "sprint-board",
 						"imagePullPolicy": "Always",
 						"ports": [
 							{

@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: sprint-api
-  name: sprint-api
+    app: sprint-board
+  name: sprint-board
   namespace: prod
 spec:
   ports:
@@ -20,8 +20,8 @@ spec:
       protocol: TCP
       targetPort: 8778
   selector:
-    app: sprint-api
-    deploymentconfig: sprint-api
+    app: sprint-board
+    deploymentconfig: sprint-board
   sessionAffinity: None
   type: ClusterIP
 status:
