@@ -69,7 +69,6 @@ node('maven') {
         withMaven(mavenSettingsConfig: 'microservices-scrum') {
 			sh "mvn release:clean release:prepare release:perform -DreleaseVersion=${releaseVersion} -DdevelopmentVersion=${developmentVersion} -DpushChanges=false -DlocalCheckout=true -DpreparationGoals=initialize -B"
 			sh "git push origin master"
-			sh "mvn versions:set -DnewVersion=${releaseVersion}"
 			sh "git tag ${releaseTag}"
 			sh "git push origin ${releaseTag}"
 		} 
