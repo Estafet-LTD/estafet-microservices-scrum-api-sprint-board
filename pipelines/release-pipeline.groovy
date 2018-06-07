@@ -74,8 +74,9 @@ node('maven') {
 		} 
 	}	
 
-	stage("tag image") {
+	stage("promote to production") {
 		openshiftTag namespace: project, srcStream: microservice, srcTag: 'PrepareForTesting', destinationNamespace: 'prod', destinationStream: microservice, destinationTag: releaseVersion
+		openshiftTag namespace: project, srcStream: microservice, srcTag: 'PrepareForTesting', destinationNamespace: 'prod', destinationStream: microservice, destinationTag: 'latest'
 	}	
 	
 }
