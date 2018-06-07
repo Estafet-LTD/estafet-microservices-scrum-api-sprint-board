@@ -54,7 +54,7 @@
 							}
 						],
 						"name": "sprint-board",
-						"image": "sprint-board:latest",
+						"image": "172.30.1.1:5000/prod/sprint-board:latest",
 						"imagePullPolicy": "Always",
 						"ports": [
 							{
