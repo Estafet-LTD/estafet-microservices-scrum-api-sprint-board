@@ -7,3 +7,5 @@ cpu_max: 1000m
 
 memory_min: 50Mi
 memory_max: 200Mi
+
+expose_service: false
