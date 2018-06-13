@@ -71,18 +71,18 @@ You can find a detailed explanation of how to install this (and other microservi
 To retrieve an example the sprint board object (useful for testing to see the microservice is online).
 
 ```
-GET http://sprint-board-api/sprint
+GET http://<sprint-board-microservice>/api
 ```
 
 To retrieve a sprint board for a particular sprint
 
 ```
-GET http://sprint-board-api/sprint/2/board
+GET http://<sprint-board-microservice>/sprint/2/board
 ```
 
 ## Environment Variables
 ```
-SPRINT_API_SERVICE_URI=http://localhost:8080/sprint-api
-STORY_API_SERVICE_URI=http://localhost:8080/story-api
-TASK_API_SERVICE_URI=http://localhost:8080/task-api
+SPRINT_API_SERVICE_URI
+STORY_API_SERVICE_URI
+TASK_API_SERVICE_URI
 ```
