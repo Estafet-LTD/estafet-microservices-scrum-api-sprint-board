@@ -1,6 +1,3 @@
 /target/
-/.settings/
-/.classpath
-/.project
 /src/main/java/META-INF
 /release-pipeline.groovy.bak
