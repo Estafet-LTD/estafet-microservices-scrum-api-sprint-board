@@ -20,6 +20,8 @@ public class SprintBoard {
 	private List<Task> inProgress = new ArrayList<Task>();
 
 	private List<Task> completed = new ArrayList<Task>();
+	
+	private String version;
 
 	SprintBoard() {}
 	
@@ -60,6 +62,10 @@ public class SprintBoard {
 				to.add(fromTask);
 			}
 		}
+	}
+
+	public String getVersion() {
+		return version;
 	}
 
 	public Sprint getSprint() {
@@ -104,12 +110,13 @@ public class SprintBoard {
 		return ids;
 	}
 	
-	public static SprintBoard getAPI() {
+	public static SprintBoard getAPI(String version) {
 		SprintBoard board = new SprintBoard();
 		board.todo.add(Task.getAPI());
 		board.inProgress.add(Task.getAPI());
 		board.completed.add(Task.getAPI());
 		board.sprint = Sprint.getAPI();
+		board.version = API.getVersion(version);
 		return board;
 	}
 

@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: sprint-board-build-config
+parameters:
+- description: Defines the namespace within which these objects are deployed
+  name: NAMESPACE
+  required: true
+- description: Defines the location of the estafet github (change this if you have forked and want to use another github)
+  name: GITHUB
+  required: true
+- description: Defines name of the microservice
+  name: MICROSERVICE
+  value: sprint-board
+  required: true
+- description: Defines the git repository uri within which the microservice resides
+  name: MICROSERVICE_REPO_URI
+  value: estafet-microservices-scrum-api-sprint-board
+  required: true
+- description: Git branch/tag reference
+  name: SOURCE_REPOSITORY_REF
+  value: master
+  required: false
+- description: Defines docker registry
+  name: DOCKER_REGISTRY
+  value: docker-registry.default.svc:5000
+  required: true    
+- description: Defines docker image label
+  name: DOCKER_IMAGE_LABEL
+  required: true        
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: ${MICROSERVICE}
+      product: microservices-scrum
+    name: ${MICROSERVICE}
+    namespace: ${NAMESPACE}
+  spec:
+    lookupPolicy:
+      local: false
+  status:
+    dockerImageRepository: '${DOCKER_REGISTRY}/${NAMESPACE}/${MICROSERVICE}'
+    tags:
+      - items:
+        tag: latest
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: ${MICROSERVICE}
+      product: microservices-scrum
+    name: ${MICROSERVICE}
+    namespace: ${NAMESPACE}
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: "${MICROSERVICE}:${DOCKER_IMAGE_LABEL}"
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      git:
+        ref: ${SOURCE_REPOSITORY_REF}
+        uri: "https://github.com/${GITHUB}/${MICROSERVICE_REPO_URI}"
+      type: Git
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: 'redhat-openjdk18-openshift:1.2'
+          namespace: ${NAMESPACE}
+      type: Source
+    successfulBuildsHistoryLimit: 5
