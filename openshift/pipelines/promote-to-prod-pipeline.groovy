@@ -15,26 +15,6 @@ def getPassive(json) {
 	return namespace.equals("green") ? "blue" : "green" 
 }
 
-@NonCPS
-def getImageStreamHash(json, version) {
-	def tags = new groovy.json.JsonSlurper().parseText(json).status.tags
-	for (int i = 0; i < tags.size(); i++) {
-		if (tags[i]['tag'].equals(version)) {
-			def image = tags[i]['items'][0]['image']
-			def matcher = image =~ /(sha256\:)(\w+)/
-			return matcher[0][2]
-		}
-	}
-	throw new RuntimeException("cannot find image for version $version")
-}
-
-@NonCPS
-def getPodImageHash(json) {
-	def imageId = new groovy.json.JsonSlurper().parseText(json).items[0].status.containerStatuses[0].imageID
-	def matcher = imageId =~ /(.*\@sha256\:)(\w+)/
-	return matcher[0][2]
-}
-
 def recentVersion( versions ) {
 	def size = versions.size()
 	return versions[size-1]
@@ -49,25 +29,6 @@ def getLatestVersion(project, microservice) {
 	}
 	return recentVersion(versions)
 }
-
-boolean isLatestVersionDeployed(project, microservice, version, env) {
-	sh "oc get is ${microservice} -o json -n ${project} > image.json"
-	def image = readFile('image.json')
-	def imageStreamHash = getImageStreamHash(image, version)
-	println "image stream hash $imageStreamHash"
-	sh "oc get pods --selector deploymentconfig=${env}${microservice} -n ${project} > exists.json"
-	def exists = readFile('exists.json')
-	if (exists.indexOf("\"items\": []") < 0) {
-		sh "oc get pods --selector deploymentconfig=${env}${microservice} -n ${project} -o json > pod.json"
-		def pod = readFile('pod.json')
-		def podImageHash = getPodImageHash(pod)
-		println "pod image hash $podImageHash"
-		return imageStreamHash.equals(podImageHash)	
-	} else {
-		return false
-	}
-}
-
 
 node {
 	
@@ -106,12 +67,7 @@ node {
 	}
 	
 	stage("execute deployment") {
-		if (!isLatestVersionDeployed(project, microservice, version, env)) {
-			openshiftDeploy namespace: project, depCfg: "${env}${microservice}",  waitTime: "3000000"
-			openshiftVerifyDeployment namespace: project, depCfg: "${env}${microservice}", replicaCount:"1", verifyReplicaCount: "true", waitTime: "300000" 
-		} else {
-			println "version $version of $microservice is already deployed and running"
-		}
+		openshiftVerifyDeployment namespace: project, depCfg: "${env}${microservice}", replicaCount:"1", verifyReplicaCount: "true", waitTime: "300000" 
 	}
 
 }
