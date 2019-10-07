@@ -50,15 +50,15 @@ def getLatestVersion(project, microservice) {
 	return recentVersion(versions)
 }
 
-boolean isLatestVersionDeployed(project, microservice, version) {
+boolean isLatestVersionDeployed(project, microservice, version, env) {
 	sh "oc get is ${microservice} -o json -n ${project} > image.json"
 	def image = readFile('image.json')
 	def imageStreamHash = getImageStreamHash(image, version)
 	println "image stream hash $imageStreamHash"
-	sh "oc get pods --selector deploymentconfig=${microservice} -n ${project} > exists.json"
+	sh "oc get pods --selector deploymentconfig=${env}${microservice} -n ${project} > exists.json"
 	def exists = readFile('exists.json')
-	if (exists.indexOf("No resources")>= 0) {
-		sh "oc get pods --selector deploymentconfig=${microservice} -n ${project} -o json > pod.json"
+	if (exists.indexOf("\"items\": []") < 0) {
+		sh "oc get pods --selector deploymentconfig=${env}${microservice} -n ${project} -o json > pod.json"
 		def pod = readFile('pod.json')
 		def podImageHash = getPodImageHash(pod)
 		println "pod image hash $podImageHash"
@@ -106,7 +106,7 @@ node {
 	}
 	
 	stage("execute deployment") {
-		if (!isLatestVersionDeployed(project, microservice, version)) {
+		if (!isLatestVersionDeployed(project, microservice, version, env)) {
 			openshiftDeploy namespace: project, depCfg: "${env}${microservice}",  waitTime: "3000000"
 			openshiftVerifyDeployment namespace: project, depCfg: "${env}${microservice}", replicaCount:"1", verifyReplicaCount: "true", waitTime: "300000" 
 		} else {
