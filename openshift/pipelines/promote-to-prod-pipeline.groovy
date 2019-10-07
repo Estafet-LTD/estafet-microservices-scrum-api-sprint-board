@@ -10,7 +10,7 @@ def getVersions(json) {
 
 @NonCPS
 def getPassive(json) {
-	def matcher = new groovy.json.JsonSlurper().parseText(json).items[0].spec.to.name =~ /(green|blue)(\-basic\-ui)/
+	def matcher = new groovy.json.JsonSlurper().parseText(json).spec.to.name =~ /(green|blue)(basic\-ui)/
 	String namespace = matcher[0][1]
 	return namespace.equals("green") ? "blue" : "green" 
 }
@@ -83,7 +83,7 @@ node {
 	])
 	
 	stage("determine the environment to deploy to") {
-		sh "oc get route -o json -n ${project} > route.json"
+		sh "oc get route basic-ui -o json -n ${project} > route.json"
 		def route = readFile('route.json')
 		env = getPassive(route)
 		println "the target environment is $env"
