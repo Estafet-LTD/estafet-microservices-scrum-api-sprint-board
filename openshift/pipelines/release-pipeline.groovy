@@ -101,8 +101,8 @@ node('maven') {
 		openshiftVerifyDeployment namespace: project, depCfg: microservice, replicaCount:"1", verifyReplicaCount: "true", waitTime: "300000" 
 	}
 
-	stage("promote image to staging") {
-		openshiftTag namespace: project, srcStream: microservice, srcTag: releaseVersion, destinationNamespace: 'staging', destinationStream: microservice, destinationTag: releaseVersion
+	stage("promote image") {
+		openshiftTag namespace: project, srcStream: microservice, srcTag: releaseVersion, destinationNamespace: 'prod', destinationStream: microservice, destinationTag: releaseVersion
 	}	
 
 }
