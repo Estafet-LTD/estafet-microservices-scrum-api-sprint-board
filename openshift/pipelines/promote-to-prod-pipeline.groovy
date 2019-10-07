@@ -9,10 +9,10 @@ def getVersions(json) {
 }
 
 @NonCPS
-def getNamespace(json) {
+def getPassive(json) {
 	def matcher = new groovy.json.JsonSlurper().parseText(json).items[0].spec.to.name =~ /(green|blue)(\-basic\-ui)/
 	String namespace = matcher[0][1]
-	return namespace.equals("green") ? "prod-blue" : "prod-green" 
+	return namespace.equals("green") ? "blue" : "green" 
 }
 
 @NonCPS
@@ -71,8 +71,9 @@ boolean isLatestVersionDeployed(project, microservice, version) {
 
 node {
 	
-	def project
+	def project = "prod"
 	def version
+	dev env
 	def microservice = "sprint-board"
 
 	properties([
@@ -82,10 +83,10 @@ node {
 	])
 	
 	stage("determine the environment to deploy to") {
-		sh "oc get route -o json -n live > route.json"
+		sh "oc get route -o json -n ${project} > route.json"
 		def route = readFile('route.json')
-		project = getNamespace(route)
-		println "the target namespace is $project"
+		env = getPassive(route)
+		println "the target environment is $env"
 	}
 	
 	stage("determine which image is to be deployed") {
@@ -100,8 +101,8 @@ node {
 	}
 	
 	stage("create deployment config") {
-		sh "oc process -n ${project} -f openshift/templates/${microservice}-config.yml -p NAMESPACE=${project} -p DOCKER_NAMESPACE=${project} -p DOCKER_IMAGE_LABEL=${version} | oc apply -f -"
-		sh "oc set env dc/${microservice} JAEGER_AGENT_HOST=jaeger-agent.${project}.svc JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger-agent.${project}.svc:5778 JAEGER_SAMPLER_PARAM=1 JAEGER_SAMPLER_TYPE=const -n ${project}"
+		sh "oc process -n ${project} -f openshift/templates/${microservice}-config.yml -p NAMESPACE=${project} -p ENV=${env} -p DOCKER_NAMESPACE=${project} -p DOCKER_IMAGE_LABEL=${version} | oc apply -f -"
+		sh "oc set env dc/${microservice} SPRINT_API_SERVICE_URI=http://${env}sprint-api.${project}.svc:8080 STORY_API_SERVICE_URI=http://${env}story-api.${project}.svc:8080 TASK_API_SERVICE_URI=http://${env}task-api.${project}.svc:8080 JAEGER_AGENT_HOST=jaeger-agent.${project}.svc JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger-agent.${project}.svc:5778 JAEGER_SAMPLER_PARAM=1 JAEGER_SAMPLER_TYPE=const -n ${project}"
 	}
 	
 	stage("execute deployment") {
