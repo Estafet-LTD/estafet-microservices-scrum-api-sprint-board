@@ -30,7 +30,7 @@ def getLatestVersion(microservice) {
 	def image = readFile('image.json')
 	def versions = getVersions(image)
 	if (versions.size() == 0) {
-		throw new RuntimeException("There are no images for ${microservice}")
+		error("There are no images for ${microservice}")
 	}
 	return recentVersion(versions)
 }
@@ -60,7 +60,7 @@ node('maven') {
 		def matcher = new XmlSlurper().parseText(pom).version =~ /(\d+\.\d+\.)(\d+)(\-SNAPSHOT)/
 		String pomVersion = "${matcher[0][1]}${matcher[0][2].toInteger()}-SNAPSHOT"
 		if (!version.equals(pomVersion)) {
-			throw new RuntimeException("Source version ${pomVersion} does not match image version ${version}")
+			error("Source version ${pomVersion} does not match image version ${version}")
 		}
 	}
 

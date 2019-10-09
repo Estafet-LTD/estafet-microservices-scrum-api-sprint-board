@@ -25,7 +25,7 @@ def getLatestVersion(project, microservice) {
 	def image = readFile('image.json')
 	def versions = getVersions(image)
 	if (versions.size() == 0) {
-		throw new RuntimeException("There are no images for ${microservice}")
+		error("There are no images for ${microservice}")
 	}
 	return recentVersion(versions)
 }
