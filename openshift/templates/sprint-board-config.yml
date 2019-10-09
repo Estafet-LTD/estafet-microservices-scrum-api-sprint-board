@@ -41,6 +41,7 @@ objects:
       app: "${ENV}${MICROSERVICE}"
       product: microservices-scrum
       environment: ${ENV}
+      testStatus: untested
     name: "${ENV}${MICROSERVICE}"
     namespace: ${NAMESPACE}
   spec:
