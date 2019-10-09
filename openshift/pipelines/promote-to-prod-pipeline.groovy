@@ -30,12 +30,25 @@ def getLatestVersion(project, microservice) {
 	return recentVersion(versions)
 }
 
+@NonCPS
+def getTestStatus(json) {
+	def items = new groovy.json.JsonSlurper().parseText(json).items
+	for (int i = 0; i < items.size(); i++) {
+		def testStatus = items[i]['metadata']['labels']['testStatus']
+		if (testStatus.equals("untested") || testStatus.equals("failed")) {
+			return "false"
+		}
+	}
+	return "true"
+}
+
 node {
 	
 	def project = "prod"
 	def microservice = "sprint-board"
 	def version
 	def env
+	def testStatus
 
 	properties([
 	  parameters([
@@ -49,6 +62,14 @@ node {
 		env = getPassive(route)
 		println "the target environment is $env"
 	}
+	
+	stage ("determine the status of the target environment") {
+		sh "oc get dc --selector product=microservices-scrum -n test -o json > test.json"
+		def test = readFile('test.json')
+		testStatus = getTestStatus(test)
+		println "the target environment test status is $testStatus"
+		if (testStatus.equals("false")) error("Cannot promote $env microservices live as they have not been passed tested")
+	}		
 	
 	stage("determine which image is to be deployed") {
 		version = getLatestVersion project, microservice
