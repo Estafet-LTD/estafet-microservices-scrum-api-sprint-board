@@ -88,7 +88,7 @@ node {
 	}
 	
 	stage("execute deployment") {
-		openshiftDeploy namespace: project, depCfg: microservice,  waitTime: "3000000"
+		openshiftDeploy namespace: project, depCfg: "${env}${microservice}",  waitTime: "3000000"
 		openshiftVerifyDeployment namespace: project, depCfg: "${env}${microservice}", replicaCount:"1", verifyReplicaCount: "true", waitTime: "300000" 
 	}
 	
