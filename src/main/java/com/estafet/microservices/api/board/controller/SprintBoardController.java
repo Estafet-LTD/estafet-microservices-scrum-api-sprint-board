@@ -34,6 +34,4 @@ public class SprintBoardController {
 		return sprintBoardService.getSprintBoard(sprintId);
 	}
 
-	
-
 }
