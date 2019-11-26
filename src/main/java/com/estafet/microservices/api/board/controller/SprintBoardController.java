@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.estafet.microservices.api.board.model.SprintBoard;
 import com.estafet.microservices.api.board.service.SprintBoardService;
 
+import io.opentracing.Tracer;
+
 @RestController
 public class SprintBoardController {
 
@@ -17,9 +19,13 @@ public class SprintBoardController {
 	
 	@Autowired
 	private SprintBoardService sprintBoardService;
+	
+	@Autowired
+	private Tracer tracer;	
 
 	@GetMapping("/api")
 	public SprintBoard getAPI() {
+		tracer.activeSpan().deactivate();
 		return SprintBoard.getAPI(appVersion);
 	}
 	
