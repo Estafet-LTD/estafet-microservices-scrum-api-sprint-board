@@ -7,6 +7,10 @@ parameters:
 - description: Defines the namespace within which these objects are deployed
   name: NAMESPACE
   required: true
+- description: Defines the namespace for the image stream for builder image
+  name: IMAGESTREAM_NAMESPACE
+  value: openshift
+  required: true       
 - description: Defines the location of the estafet github (change this if you have forked and want to use another github)
   name: GITHUB
   required: true
@@ -29,6 +33,9 @@ parameters:
 - description: Defines docker image label
   name: DOCKER_IMAGE_LABEL
   required: true        
+- description: Defines the product that this template is related to
+  name: PRODUCT
+  required: true     
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -36,7 +43,7 @@ objects:
     creationTimestamp: null
     labels:
       app: ${MICROSERVICE}
-      product: microservices-scrum
+      product: ${PRODUCT}
     name: ${MICROSERVICE}
     namespace: ${NAMESPACE}
   spec:
@@ -53,7 +60,7 @@ objects:
     creationTimestamp: null
     labels:
       app: ${MICROSERVICE}
-      product: microservices-scrum
+      product: ${PRODUCT}
     name: ${MICROSERVICE}
     namespace: ${NAMESPACE}
   spec:
@@ -73,9 +80,12 @@ objects:
       type: Git
     strategy:
       sourceStrategy:
+        env:
+        - name: MAVEN_MIRROR_URL
+          value: http://nexus.nexus.svc:8081/nexus/content/groups/public       
         from:
           kind: ImageStreamTag
           name: 'redhat-openjdk18-openshift:1.2'
-          namespace: ${NAMESPACE}
+          namespace: ${IMAGESTREAM_NAMESPACE}
       type: Source
     successfulBuildsHistoryLimit: 5

@@ -1,0 +1,19 @@
+- build:
+    db: false
+    mq: false
+    wiremock: true
+    promote: true
+    tests: true
+    wiremock_environment_variables:
+      - name: SPRINT_API_SERVICE_URI
+        value: http://wiremock-docker.ms-scrum-build.svc:8080/basic-ui/sprint-api
+      - name: STORY_API_SERVICE_URI
+        value: http://wiremock-docker.ms-scrum-build.svc:8080/basic-ui/story-api
+      - name: TASK_API_SERVICE_URI
+        value: http://wiremock-docker.ms-scrum-build.svc:8080/basic-ui/task-api
+- release:
+    db: false
+- promote:
+    db: false
+    mq: false
+    expose: false

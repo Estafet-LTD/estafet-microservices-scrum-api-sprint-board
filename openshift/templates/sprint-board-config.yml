@@ -32,6 +32,9 @@ parameters:
 - description: Environment
   name: ENV
   required: false    
+- description: Defines the product that this template is related to
+  name: PRODUCT
+  required: true     
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -39,7 +42,7 @@ objects:
     creationTimestamp: null
     labels:
       app: "${ENV}${MICROSERVICE}"
-      product: microservices-scrum
+      product: ${PRODUCT}
       environment: ${ENV}
       testStatus: untested
     name: "${ENV}${MICROSERVICE}"
@@ -126,7 +129,7 @@ objects:
     creationTimestamp: null
     labels:
       app: "${ENV}${MICROSERVICE}"
-      product: microservices-scrum
+      product: ${PRODUCT}
     name: "${ENV}${MICROSERVICE}"
     namespace: ${NAMESPACE}
   spec:

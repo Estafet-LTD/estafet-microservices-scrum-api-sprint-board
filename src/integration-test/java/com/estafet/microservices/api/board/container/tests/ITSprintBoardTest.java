@@ -6,13 +6,15 @@ import static org.hamcrest.Matchers.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.estafet.microservices.scrum.lib.commons.properties.PropertyUtils;
+
 import io.restassured.RestAssured;
 
 public class ITSprintBoardTest {
 
 	@Before
 	public void before() throws Exception {
-		RestAssured.baseURI = System.getenv("SPRINT_BOARD_API_SERVICE_URI");
+		RestAssured.baseURI = PropertyUtils.instance().getProperty("SPRINT_BOARD_API_SERVICE_URI");
 	}
 
 	@Test
