@@ -72,8 +72,8 @@ objects:
       spec:
         containers:
           - env:
-              - name: SPRINT_BURNDOWN_SERVICE_URI
-                value: 'http://${ENV}sprint-burndown.${NAMESPACE}.svc:8080'
+              - name: SPRINT_API_SERVICE_URI
+                value: 'http://${ENV}sprint-api.${NAMESPACE}.svc:8080'
               - name: STORY_API_SERVICE_URI
                 value: 'http://${ENV}story-api.${NAMESPACE}.svc:8080'
               - name: TASK_API_SERVICE_URI
