@@ -7,9 +7,9 @@
 	<url>https://github.com/Estafet-LTD/estafet-microservices-scrum-api-sprint-board</url>
 	
 	<parent>
-		<groupId>com.estafet.microservices.scrum</groupId>
-		<artifactId>microservices-scrum-parent</artifactId>
-		<version>1.0.6</version>
+		<groupId>com.estafet.openshift.boost</groupId>
+		<artifactId>estafet-openshift-boost-springboot</artifactId>
+		<version>1.0.0</version>
 		<relativePath />
 	</parent>
 
