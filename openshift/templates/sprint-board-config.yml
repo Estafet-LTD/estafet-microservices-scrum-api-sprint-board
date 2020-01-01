@@ -44,7 +44,7 @@ objects:
       app: "${ENV}${MICROSERVICE}"
       product: ${PRODUCT}
       environment: ${ENV}
-      testStatus: untested
+      testStatus: false
     name: "${ENV}${MICROSERVICE}"
     namespace: ${NAMESPACE}
   spec:
