@@ -36,6 +36,10 @@ parameters:
 - description: Defines the product that this template is related to
   name: PRODUCT
   required: true     
+- description: Maven mirror url
+  name: MAVEN_MIRROR_URL
+  value: http://nexus.nexus.svc:8081/nexus/content/groups/public
+  required: true       
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -82,7 +86,7 @@ objects:
       sourceStrategy:
         env:
         - name: MAVEN_MIRROR_URL
-          value: http://nexus.nexus.svc:8081/nexus/content/groups/public       
+          value: ${MAVEN_MIRROR_URL}       
         from:
           kind: ImageStreamTag
           name: 'redhat-openjdk18-openshift:1.2'
