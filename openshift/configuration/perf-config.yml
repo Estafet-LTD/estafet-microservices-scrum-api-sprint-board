@@ -1,4 +1,10 @@
 config_map:
+  - name: SPRINT_API_SERVICE_URI
+    value: http://sprint-api.{{ project }}.svc:8080
+  - name: STORY_API_SERVICE_URI
+    value: http://story-api.{{ project }}.svc:8080
+  - name: TASK_API_SERVICE_URI
+    value: http://task-api.{{ project }}.svc:8080
   - name: JAEGER_SERVICE_NAME
     value: perf-{{ microservice.name }}
   - name: JAEGER_SAMPLER_TYPE

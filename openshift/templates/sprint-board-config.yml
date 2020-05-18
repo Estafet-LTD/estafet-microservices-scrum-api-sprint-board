@@ -79,6 +79,21 @@ objects:
       spec:
         containers:
           - env:
+              - name: SPRINT_API_SERVICE_URI
+                valueFrom:
+                  configMapKeyRef:
+                    name: ${MICROSERVICE} 
+                    key: SPRINT_API_SERVICE_URI
+              - name: STORY_API_SERVICE_URI
+                valueFrom:
+                  configMapKeyRef:
+                    name: ${MICROSERVICE} 
+                    key: STORY_API_SERVICE_URI
+              - name: TASK_API_SERVICE_URI
+                valueFrom:
+                  configMapKeyRef:
+                    name: ${MICROSERVICE} 
+                    key: TASK_API_SERVICE_URI          
               - name: JAEGER_SERVICE_NAME
                 valueFrom:
                   configMapKeyRef:
