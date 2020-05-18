@@ -1,10 +1,10 @@
 config_map:
   - name: SPRINT_API_SERVICE_URI
-    value: http://sprint-api.{{ project }}.svc:8080
+    value: http://wiremock-docker.{{ project }}.svc:8080/sprint-board/sprint-api
   - name: STORY_API_SERVICE_URI
-    value: http://story-api.{{ project }}.svc:8080
+    value: http://wiremock-docker.{{ project }}.svc:8080/sprint-board/story-api
   - name: TASK_API_SERVICE_URI
-    value: http://task-api.{{ project }}.svc:8080
+    value: http://wiremock-docker.{{ project }}.svc:8080/sprint-board/task-api
   - name: JAEGER_SERVICE_NAME
     value: build-{{ microservice.name }}
   - name: JAEGER_SAMPLER_TYPE
