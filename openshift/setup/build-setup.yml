@@ -1,0 +1,4 @@
+setup:
+  - name: wiremock-load
+    repo: estafet-microservices-scrum-api-sprint-board
+    json_dir: src/integration-test/resources

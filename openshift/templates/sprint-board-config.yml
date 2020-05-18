@@ -13,11 +13,18 @@ parameters:
   required: true
 - description: Defines max memory
   name: MAX_MEMORY
-  value: 400Mi
   required: true  
 - description: Defines min memory
   name: MIN_MEMORY
-  value: 50Mi
+  required: true
+- description: Defines max cpu
+  name: MAX_CPU
+  required: true  
+- description: Defines min memory
+  name: MIN_CPU
+  required: true
+- description: Defines number of replicas
+  name: REPLICAS
   required: true
 - description: Defines the namespace for the image stream
   name: DOCKER_NAMESPACE
@@ -48,7 +55,7 @@ objects:
     name: "${ENV}${MICROSERVICE}"
     namespace: ${NAMESPACE}
   spec:
-    replicas: 1
+    replicas: ${REPLICAS}
     revisionHistoryLimit: 10
     selector:
       app: "${ENV}${MICROSERVICE}"
@@ -72,20 +79,31 @@ objects:
       spec:
         containers:
           - env:
-              - name: SPRINT_API_SERVICE_URI
-                value: 'http://${ENV}sprint-api.${NAMESPACE}.svc:8080'
-              - name: STORY_API_SERVICE_URI
-                value: 'http://${ENV}story-api.${NAMESPACE}.svc:8080'
-              - name: TASK_API_SERVICE_URI
-                value: 'http://${ENV}task-api.${NAMESPACE}.svc:8080'
+              - name: JAEGER_SERVICE_NAME
+                valueFrom:
+                  configMapKeyRef:
+                    name: ${MICROSERVICE} 
+                    key: JAEGER_SERVICE_NAME
               - name: JAEGER_SAMPLER_TYPE
-                value: const
+                valueFrom:
+                  configMapKeyRef:
+                    name: ${MICROSERVICE} 
+                    key: JAEGER_SAMPLER_TYPE
               - name: JAEGER_SAMPLER_PARAM
-                value: '1'                
+                valueFrom:
+                  configMapKeyRef:
+                    name: ${MICROSERVICE} 
+                    key: JAEGER_SAMPLER_PARAM
               - name: JAEGER_SAMPLER_MANAGER_HOST_PORT
-                value: jaeger-agent.${NAMESPACE}.svc:5778
+                valueFrom:
+                  configMapKeyRef:
+                    name: ${MICROSERVICE} 
+                    key: JAEGER_SAMPLER_MANAGER_HOST_PORT
               - name: JAEGER_AGENT_HOST
-                value: jaeger-agent.${NAMESPACE}.svc                             
+                valueFrom:
+                  configMapKeyRef:
+                    name: ${MICROSERVICE} 
+                    key: JAEGER_AGENT_HOST                            
             image: ${DOCKER_REGISTRY}/${DOCKER_NAMESPACE}/${MICROSERVICE}:${DOCKER_IMAGE_LABEL}
             imagePullPolicy: Always
             name: "${ENV}${MICROSERVICE}"
@@ -108,10 +126,10 @@ objects:
                 scheme: HTTP
             resources:
               limits:
-                cpu: '1'
+                cpu: ${MAX_CPU}
                 memory: ${MAX_MEMORY}
               requests:
-                cpu: 50m
+                cpu: ${MIN_CPU}
                 memory: ${MIN_MEMORY}
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
